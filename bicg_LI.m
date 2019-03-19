@@ -8,9 +8,9 @@ method_name = 'gmres';
 
 %For simple testing
 simple_testing = 1;
-condition_number_range = [8];
+condition_number_range = 1:8;
 runs_per_matrix_size = [1];
-matrix_sizes = [1000];
+matrix_sizes = [100, 200, 500];
 
 normal = true;
 mode = 'nofill';

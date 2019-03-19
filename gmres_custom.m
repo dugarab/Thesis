@@ -1,4 +1,4 @@
-function [x_final, e_residue, e_estimator, iters] = gmres_custom( A, b, x_start, max_iterations, threshold, L, U)
+function [x_final, e_residue, e_estimator, iters, x_ans] = gmres_custom( A, b, x_start, max_iterations, threshold, L, U)
   n = length(A);
   m = max_iterations;
   if ~exist('L', 'var')
@@ -6,6 +6,7 @@ function [x_final, e_residue, e_estimator, iters] = gmres_custom( A, b, x_start,
       U = eye(n);
   end
   x = zeros(n);
+  x_ans = A\b;
   %use x as the initial vector
   r=L\(b-(A*(U\x_start)));
 
@@ -51,14 +52,13 @@ function [x_final, e_residue, e_estimator, iters] = gmres_custom( A, b, x_start,
   
   e_residue = zeros(1,iters-1);
   e_estimator = zeros(1,iters-1);
-  norm_x = norm(x(:,iters));
+  norm_x = norm(x_ans);
   norm_b = norm(b);
-  for i = 1:iters-1
-      e_residue(i) = norm(b - A*x(:,i))/norm_b;
-      e_estimator(i) = norm(x(:,iters)-x(:,i))/norm_x;
+  for iter = 1:iters-1
+      e_residue(iter) = norm(b - A*x(:,iter))/norm_b;
+      e_estimator(iter) = norm(x_ans-x(:,iter))/norm_x;
       
   end
-  
   
   x_final = x(:,iters);
   %calculate the result

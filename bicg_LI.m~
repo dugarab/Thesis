@@ -8,9 +8,9 @@ method_name = 'gmres';
 
 %For simple testing
 simple_testing = 1;
-condition_number_range = [8];
+condition_number_range = 1:8;
 runs_per_matrix_size = [1];
-matrix_sizes = [1000];
+matrix_sizes = [100 200];
 
 normal = true;
 mode = 'nofill';
@@ -93,8 +93,9 @@ for k = condition_number_range
             end
             
             if strcmp(method_name, 'gmres')
-                [x1,fl1,rr1,it1,rv1] = gmres_custom(A,b,m,tol,maxit,L,U);A,b, zeros(N,1),N, 10^-5,L,U
-                no_of_it_pre(k1,i,j) = (it1(1)-1)*m+it1(2);
+                
+                [x1, e_res, e_estimator, iters1] = gmres_custom(A,b,zeros(N,1), maxit, tol,L,U);
+                no_of_it_pre(k1,i,j) = iters1;
             elseif strcmp(method_name, 'bicg')
                 [x1,fl1,rr1,it1,rv1] = bicg(A,b,tol,maxit,L,U);
                 no_of_it_pre(k1,i,j) = it1;

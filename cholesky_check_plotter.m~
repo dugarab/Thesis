@@ -1,0 +1,23 @@
+c_before = ((1/rc)^0.5)*ones(1,total_iters);
+c_after = ((1/rc)*condition_num_gain).^0.5;
+
+gain_calculated = (log(c_after+1) - log(c_after-1))./(log(c_before+1) - log(c_before-1));
+t = 1:total_iters;
+figure(1);
+plot(t, gain_calculated, t, iteration_gain_cg,t,iteration_gain_gmres);
+legend("Gain calcuated","Gain from cg", "gain from gmres");
+ylabel("Gain");
+title("Comparison of gain from cholesky N = 500, cond = 10^4");
+
+figure(2);
+
+semilogy(t, residue_cg1, t, residue_cg2);
+legend("x^TAx rel Error","b-Ax rel Error");
+ylabel("Error");
+title("Comparison of errors from conjugate gradient");
+
+figure(3);
+plot(t, total_iters_cg, t, total_iters_gmres);
+legend("Initial Iterations by CG","Initial ");
+ylabel("Error");
+title("Comparison of errors from conjugate gradient");
