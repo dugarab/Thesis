@@ -3,45 +3,65 @@ k = 4;
 %plot(t,chebyshevT(k,sym(t)));
 
 mode = 'nofill';
-N = 500;
-avg = [];
+sizes = [100,200,500,1000];
 iterations = [];
-no_of_trials = 1;
+no_of_trials = 2;
 val = (1+10^k)/(1-10^k);
 w = val + (val^2 - 1)^0.5;
-C = zeros(N,1);
-for i = 1:N
-    C(i) = 1/abs(0.5*(w^i + w^(-i)));
-end
+iteration_numbers = zeros(length(sizes), no_of_trials_trials)
 
 %C = 1./(abs(chebyshevT(1:N,vpa(val))));
+size_number = 1;
+for N = sizes
+    C = zeros(N,1);
 
-for i = 1:no_of_trials
-     offset = 0;
+    avg = zeros(1,no_of_trials);
+    for i = 1:N
+        C(i) = 1/abs(0.5*(w^i + w^(-i)));
+    end
 
-    [Q, ~] = qr(randn(N));
-    temp = Q*(diag(10 .^( k/N:k/N:k)))*Q';
-    Aactual = temp;%*(diag(abs(randn(N,1))))*inv(temp);
-    b = randn(N,1);
+    for i = 1:no_of_trials
+         offset = 0;
 
-    A = Aactual;
-    tol = 10^-4;
-    %A = Aactual;
-    [x1, e_res, e_estimator, iters1, x_ans] = gmres_custom(A,b,x0,m,tol);
-    r_0 = norm(b - A*x0);
-    alpha = 10^(k/N);
-    beta = 10^(k);
-    
+        [Q, ~] = qr(randn(N));
+        temp = Q*(diag(10 .^( k/N:k/N:k)))*Q';
+        A = temp;%*(diag(abs(randn(N,1))))*inv(temp);
+        b = randn(N,1); b = b/norm(b);
+        tol = 10^-3;
+        %A = Aactual;
+        m=N;
+        [x1,iters1,e_res] = cg_custom(A,b,tol);
+        %[x1, e_res, e_estimator, iters1, x_ans] = gmres_custom(A,b,zeros(N,1),m,tol);
+        %r_0 = norm(b - A*x0);
+        alpha = 10^(k/N);
+        beta = 10^(k);
+        %iters1 = iters1-1;
+        %iters1 = iters1(2);
 
-    
-    %tic();
+        %plot(1:iters1, e_res(1:iters1), 1:iters1, C(1:iters1)) 
+        %legend('Actual', 'Calculated');
+        %plot(1:no_of_trials, avg);
+        %title('Ratio of calculated vs actual rel residue (cond = 10^3, N = 500)')
+        %ylabel('Ratio');
+        %xlabel('Iteration number');
+        avg(i) = sum(abs(C(1:iters1)./e_res(1:iters1)'))/iters1;
 
-    
+        %tic();
+
+
+    end
+    disp(['N = ' num2str(N)]);
+    figure(size_number)
+    plot(1:no_of_trials, avg) 
+    %legend('calculated', 'actual');
+    %plot(1:no_of_trials, avg);
+    %title('Difference between actual and calculated residue (cond = 10^' str2num(k) ', N = ' str2num(N) ')')
+    %ylabel('Ratio');
+    %xlabel('Iteration number');
+    xlabel('Sample number');
+    ylabel('Average Ratio');
+    title(['Theoretical/Observed residue (cond = 10^' num2str(k) ', N = ' num2str(N) ')']);
+    Avg_val = sum(avg)/no_of_trials
+    size_number = size_number + 1;
+
 end
-plot(1:total_iters, final_vals, 1:total_iters, e_res_final) 
-legend('calculated', 'actual');
-%plot(1:no_of_trials, avg);
-title('Ratio of calculated vs actual rel error (cond = 10^4, N = 500)')
-ylabel('Ratio');
-xlabel('Iteration number');
-Avg_val = sum(avg)/no_of_trials

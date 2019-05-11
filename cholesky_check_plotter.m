@@ -4,20 +4,23 @@ c_after = ((1/rc)*condition_num_gain).^0.5;
 gain_calculated = (log(c_after+1) - log(c_after-1))./(log(c_before+1) - log(c_before-1));
 t = 1:total_iters;
 figure(1);
-plot(t, gain_calculated, t, iteration_gain_cg,t,iteration_gain_gmres);
-legend("Gain calcuated","Gain from cg", "gain from gmres");
+plot(t, gain_calculated, '.',t, iteration_gain_cg,'x',t,iteration_gain_gmres,'d');
+legend("Theoretical gain","observed CG gain", "observed GMRES gain");
 ylabel("Gain");
-title("Comparison of gain from cholesky N = 500, cond = 10^5");
+xlabel('Sample number');
+title(['Comparison of gain from cholesky N = ' num2str(500) ', cond = ' num2str(1/rc)]);
 
 figure(2);
 
-semilogy(t, residue_cg1, t, residue_cg2);
+semilogy(t, residue_cg1,'.', t, residue_cg2,'x');
 legend("x^TAx rel Error","b-Ax rel Error");
 ylabel("Error");
+xlabel('Sample number');
 title("Comparison of errors from conjugate gradient");
 
 figure(3);
-plot(t, total_iters_cg, t, total_iters_gmres);
+plot(t, total_iters_cg,'.', t, total_iters_gmres,'x');
 legend("iters by CG","iters by GMRES");
 ylabel("Iteration Count");
-title("Comparison of initial iteration count by CG and GMRES");
+xlabel('Sample number');
+title("Comparison of non-preconditioned iteration count by CG and GMRES");

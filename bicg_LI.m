@@ -1,4 +1,4 @@
-simple_testing = 0;
+simple_testing = 1;
 method_name = 'gmres';
 
 % %For GMRES sparse 
@@ -9,8 +9,8 @@ method_name = 'gmres';
 %For simple testing
 simple_testing = 1;
 condition_number_range = 1:8;
-runs_per_matrix_size = [1];
-matrix_sizes = [100, 200, 500];
+runs_per_matrix_size = 1:10;
+matrix_sizes = [500];
 
 normal = true;
 mode = 'nofill';

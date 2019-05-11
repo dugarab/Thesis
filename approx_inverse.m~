@@ -1,0 +1,13 @@
+N = 5;
+rc = 1/10^4;
+A = sprand(N,N,N*log2(N)/(N*N),rc);
+
+M = A;
+
+for i = 1:10
+    C = A*M;
+    G = I-C;
+    alpha 
+    
+
+end

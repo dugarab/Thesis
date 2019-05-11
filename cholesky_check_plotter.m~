@@ -7,7 +7,7 @@ figure(1);
 plot(t, gain_calculated, t, iteration_gain_cg,t,iteration_gain_gmres);
 legend("Gain calcuated","Gain from cg", "gain from gmres");
 ylabel("Gain");
-title("Comparison of gain from cholesky N = 500, cond = 10^4");
+title("Comparison of gain from cholesky N = 500, cond = 10^5");
 
 figure(2);
 
@@ -18,6 +18,6 @@ title("Comparison of errors from conjugate gradient");
 
 figure(3);
 plot(t, total_iters_cg, t, total_iters_gmres);
-legend("Initial Iterations by CG","Initial ");
-ylabel("Error");
-title("Comparison of errors from conjugate gradient");
+legend("iters by CG","iters by GMRES");
+ylabel("Iteration Count");
+title("Comparison of initial iteration count by CG and GMRES");

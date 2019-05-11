@@ -10,7 +10,7 @@ method_name = 'gmres';
 simple_testing = 1;
 condition_number_range = 1:8;
 runs_per_matrix_size = [1];
-matrix_sizes = [100 200];
+matrix_sizes = [500];
 
 normal = true;
 mode = 'nofill';
